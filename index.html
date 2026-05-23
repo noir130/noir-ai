@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>Noir AI</title>
+</head>
+
+<body>
+
+<h1>Noir AI</h1>
+
+<input id="msg" placeholder="Type message">
+<button onclick="chat()">Send</button>
+
+<pre id="out"></pre>
+
+<script>
+
+async function chat() {
+
+  const text =
+    document.getElementById("msg").value;
+
+  document.getElementById("out").innerText =
+    "Thinking...";
+
+  try {
+
+    const response = await fetch(
+      "http://192.168.254.1:3001/v1/chat/completions",
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json",
+
+          "Authorization":
+            "Bearer freellmapi-6f21ae601bd230cfcc0fb8fd8fc08a50d6512edb3ac3af14"
+        },
+
+        body: JSON.stringify({
+          model: "openai/gpt-oss-120b",
+
+          messages: [
+            {
+              role: "user",
+              content: text
+            }
+          ]
+        })
+      }
+    );
+
+    const data = await response.json();
+
+    console.log(data);
+
+    document.getElementById("out").innerText =
+"Model: " + data.model + "\n\n" +
+data.choices[0].message.content;
+
+  }
+
+  catch(err) {
+
+    console.log(err);
+
+    document.getElementById("out").innerText =
+      "Error: " + err;
+  }
+}
+
+</script>
+
+</body>
+</html>

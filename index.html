@@ -105,7 +105,10 @@ button:hover{
 
 </div>
   
-function startVoice(){
+  
+<script>
+
+  function startVoice(){
 
 const recognition =
 new webkitSpeechRecognition();
@@ -123,10 +126,8 @@ chat();
 
 recognition.start();
 
-}
+} 
   
-<script>
-
 async function chat() {
   document.getElementById("msg")
 .addEventListener("keypress", function(e){
@@ -214,15 +215,17 @@ chat();
     document.getElementById("out").innerText =
     '<div class="user">🧑 ' + text + '</div>';
 
-document.getElementById("out").innerHTML +=
+    document.getElementById("out").innerHTML +=
 '<div class="bot">🤖 ' +
 data.choices[0].message.content +
-  const speak = new SpeechSynthesisUtterance(
+'</div>';
+
+const speak = new SpeechSynthesisUtterance(
 data.choices[0].message.content
 );
 
 speechSynthesis.speak(speak);
-'</div>';
+
 document.getElementById("out").scrollTop =
 document.getElementById("out").scrollHeight;
   }

@@ -1,139 +1,336 @@
-<body>
+<style>
 
-<div class="container">
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,sans-serif;
+}
 
-<h1>J.A.R.V.I.S</h1>
+body{
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
 
-<div class="jarvis-ring">
-<div class="jarvis-core"></div>
-</div>
+background:
+radial-gradient(circle at center,#07111f,#020617 70%);
 
-<div id="out" class="chat-box"></div>
+overflow:hidden;
+color:white;
+}
 
-<div class="input-area">
+/* MAIN CONTAINER */
 
-<input id="msg" placeholder="Type message">
+.container{
+width:430px;
+height:760px;
 
-<button onclick="chat()">Send</button>
+padding:20px;
 
-<button onclick="startVoice()">🎤</button>
+border-radius:35px;
 
-</div>
+background:rgba(255,255,255,0.05);
 
-</div>
+backdrop-filter:blur(18px);
+-webkit-backdrop-filter:blur(18px);
 
-<script>
+border:1px solid rgba(0,255,255,0.15);
 
-function startVoice(){
+box-shadow:
+0 0 25px rgba(0,255,255,0.12),
+0 0 60px rgba(0,255,255,0.05);
 
-const recognition =
-new webkitSpeechRecognition();
+position:relative;
 
-recognition.lang = "en-US";
+display:flex;
+flex-direction:column;
+justify-content:flex-end;
 
-recognition.onresult = function(event){
+overflow:hidden;
+}
 
-document.getElementById("msg").value =
-event.results[0][0].transcript;
+/* TITLE */
 
-chat();
+h1{
+position:absolute;
 
-};
+top:30px;
+left:50%;
 
-recognition.start();
+transform:translateX(-50%);
+
+font-size:54px;
+letter-spacing:8px;
+
+color:#67e8f9;
+
+text-shadow:
+0 0 10px #06b6d4,
+0 0 25px #06b6d4,
+0 0 40px #0891b2;
+
+z-index:2;
+}
+
+/* JARVIS RING */
+
+.jarvis-ring{
+position:absolute;
+
+top:42%;
+left:50%;
+
+transform:translate(-50%,-50%);
+
+width:220px;
+height:220px;
+
+border-radius:50%;
+
+border:3px solid rgba(0,255,255,0.6);
+
+box-shadow:
+0 0 25px cyan,
+inset 0 0 25px cyan;
+
+display:flex;
+justify-content:center;
+align-items:center;
+
+animation:rotate 10s linear infinite;
+}
+
+.jarvis-ring::before{
+content:"";
+
+position:absolute;
+
+width:170px;
+height:170px;
+
+border-radius:50%;
+
+border:3px dashed rgba(0,255,255,0.7);
+
+animation:rotateReverse 8s linear infinite;
+}
+
+.jarvis-ring::after{
+content:"";
+
+position:absolute;
+
+width:120px;
+height:120px;
+
+border-radius:50%;
+
+border:2px solid rgba(0,255,255,0.5);
+
+box-shadow:
+0 0 15px cyan;
+}
+
+.jarvis-core{
+width:70px;
+height:70px;
+
+border-radius:50%;
+
+background:cyan;
+
+box-shadow:
+0 0 20px cyan,
+0 0 40px cyan;
+
+animation:pulse 2s infinite;
+}
+
+/* CHAT BOX */
+
+.chat-box{
+height:170px;
+
+overflow-y:auto;
+
+padding:12px;
+
+border-radius:20px;
+
+background:rgba(255,255,255,0.04);
+
+border:1px solid rgba(0,255,255,0.1);
+
+display:flex;
+flex-direction:column;
+
+gap:10px;
+
+margin-bottom:20px;
+
+backdrop-filter:blur(10px);
+}
+
+/* BOT */
+
+.bot{
+padding:14px;
+
+border-radius:18px;
+
+background:rgba(0,255,255,0.08);
+
+border:1px solid rgba(0,255,255,0.15);
+
+color:#e0f2fe;
+
+line-height:1.5;
+
+animation:fade 0.3s ease;
+}
+
+/* THINKING */
+
+.typing{
+color:#67e8f9;
+
+font-style:italic;
+padding:5px;
+}
+
+/* INPUT AREA */
+
+.input-area{
+display:flex;
+gap:10px;
+margin-top:auto;
+}
+
+input{
+flex:1;
+
+padding:16px;
+
+border:none;
+outline:none;
+
+border-radius:18px;
+
+background:rgba(255,255,255,0.07);
+
+border:1px solid rgba(0,255,255,0.15);
+
+color:white;
+
+font-size:16px;
+
+backdrop-filter:blur(10px);
+}
+
+input::placeholder{
+color:#94a3b8;
+}
+
+/* BUTTONS */
+
+button{
+padding:15px 18px;
+
+border:none;
+
+border-radius:18px;
+
+cursor:pointer;
+
+background:#06b6d4;
+
+color:white;
+
+font-size:16px;
+font-weight:bold;
+
+transition:0.3s;
+
+box-shadow:
+0 0 15px rgba(6,182,212,0.5);
+}
+
+button:hover{
+transform:scale(1.05);
+
+box-shadow:
+0 0 25px rgba(6,182,212,0.9);
+}
+
+/* ANIMATIONS */
+
+@keyframes rotate{
+
+from{
+transform:translate(-50%,-50%) rotate(0deg);
+}
+
+to{
+transform:translate(-50%,-50%) rotate(360deg);
+}
 
 }
 
-async function chat() {
+@keyframes rotateReverse{
 
-const text =
-document.getElementById("msg").value;
-
-document.getElementById("msg").value = "";
-
-document.getElementById("out").innerHTML =
-'<div class="typing">🤖 Thinking...</div>';
-
-try {
-
-let response = await fetch(
-"https://api.groq.com/openai/v1/chat/completions",
-{
-method: "POST",
-
-headers: {
-"Content-Type": "application/json",
-
-"Authorization":
-"Bearer YOUR_GROQ_API_KEY"
-},
-
-body: JSON.stringify({
-
-model: "llama-3.3-70b-versatile",
-
-messages: [
-{
-role: "user",
-content: text
-}
-]
-
-})
-
-}
-);
-
-const data =
-await response.json();
-
-const botReply =
-data.choices[0].message.content;
-
-document.getElementById("out").innerHTML =
-'<div class="bot" id="botmsg">🤖 </div>';
-
-let i = 0;
-
-const typing = setInterval(() => {
-
-document.getElementById("botmsg").innerHTML =
-"🤖 " + botReply.substring(0, i);
-
-i++;
-
-if(i > botReply.length){
-
-clearInterval(typing);
-
-const speak =
-new SpeechSynthesisUtterance(botReply);
-
-speechSynthesis.speak(speak);
-
+from{
+transform:rotate(360deg);
 }
 
-}, 25);
-
-}
-catch(err){
-
-document.getElementById("out").innerHTML =
-'<div class="bot">⚠ Error</div>';
-
-console.log(err);
-
+to{
+transform:rotate(0deg);
 }
 
 }
 
-</script>
+@keyframes pulse{
 
-</body>
+0%{
+transform:scale(1);
+}
+
+50%{
+transform:scale(1.1);
+}
+
+100%{
+transform:scale(1);
+}
+
+}
+
+@keyframes fade{
+
+from{
+opacity:0;
+transform:translateY(10px);
+}
+
+to{
+opacity:1;
+transform:translateY(0);
+}
+
+}
+
+/* SCROLLBAR */
+
+.chat-box::-webkit-scrollbar{
+width:5px;
+}
+
+.chat-box::-webkit-scrollbar-thumb{
+background:#06b6d4;
+border-radius:10px;
+}
 
 </style>
-
-<body>
 
 <div class="container">
 

@@ -213,11 +213,11 @@ chat();
     }
 
 
-document.getElementById("out").innerHTML +=
+document.getElementById("out").innerHTML =
 '<div class="bot">🤖 ' +
 data.choices[0].message.content +
 '</div>';
-
+    
 const speak = new SpeechSynthesisUtterance(
 data.choices[0].message.content
 );

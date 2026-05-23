@@ -15,8 +15,7 @@
 <pre id="out"></pre>
 
 <script>
-
-async function chat() {
+  async function chat() {
 
   const text =
     document.getElementById("msg").value;
@@ -26,7 +25,9 @@ async function chat() {
 
   try {
 
-    const response = await fetch(
+    // TRY GROQ FIRST
+
+    let response = await fetch(
       "https://api.groq.com/openai/v1/chat/completions",
       {
         method: "POST",
@@ -35,11 +36,11 @@ async function chat() {
           "Content-Type": "application/json",
 
           "Authorization":
-            "Bearer freellmapi-6f21ae601bd230cfcc0fb8fd8fc08a50d6512edb3ac3af14"
+            "Bearer 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"
         },
 
         body: JSON.stringify({
-          model: "openai/gpt-oss-120b",
+          model: "llama3-8b-8192",
 
           messages: [
             {
@@ -51,16 +52,21 @@ async function chat() {
       }
     );
 
-    const data = await response.json();
+    let data = await response.json();
 
-    console.log(data);
+console.log(data);
 
-    document.getElementById("out").innerText =
-"Model: " + data.model + "\n\n" +
-data.choices[0].message.content;
+if (data.error) {
 
-  }
+  document.getElementById("out").innerText =
+    "API Error: " + data.error.message;
 
+  return;
+}
+
+document.getElementById("out").innerText =
+  data.choices[0].message.content;
+        
   catch(err) {
 
     console.log(err);
@@ -69,7 +75,6 @@ data.choices[0].message.content;
       "Error: " + err;
   }
 }
-
 </script>
 
 </body>

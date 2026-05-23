@@ -213,10 +213,31 @@ chat();
     }
 
 
+const botReply = data.choices[0].message.content;
+
 document.getElementById("out").innerHTML =
-'<div class="bot">🤖 ' +
-data.choices[0].message.content +
-'</div>';
+'<div class="bot" id="botmsg">🤖 </div>';
+
+let i = 0;
+
+const typing = setInterval(() => {
+
+document.getElementById("botmsg").innerHTML =
+"🤖 " + botReply.substring(0, i);
+
+i++;
+
+if(i > botReply.length){
+
+clearInterval(typing);
+
+const speak = new SpeechSynthesisUtterance(botReply);
+
+speechSynthesis.speak(speak);
+
+}
+
+}, 30);
     
 const speak = new SpeechSynthesisUtterance(
 data.choices[0].message.content

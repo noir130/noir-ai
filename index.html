@@ -26,7 +26,9 @@ async function chat() {
 
   try {
 
-    const response = await fetch(
+    // ===== TRY GROQ FIRST =====
+
+    let response = await fetch(
       "https://api.groq.com/openai/v1/chat/completions",
       {
         method: "POST",
@@ -35,7 +37,7 @@ async function chat() {
           "Content-Type": "application/json",
 
           "Authorization":
-            "Bearer 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"
+            "Bearer 3FYjFEc9P8gsk_9m5Ww35vZ6qSbQfLAVjoWGdybraMnMlhU7tfTZB6Hi"
         },
 
         body: JSON.stringify({
@@ -51,16 +53,42 @@ async function chat() {
       }
     );
 
-    const data = await response.json();
+    let data = await response.json();
 
     console.log(data);
 
+    // ===== IF GROQ FAILS -> USE FREELLMAPI =====
+
     if (data.error) {
 
-      document.getElementById("out").innerText =
-        "API Error: " + data.error.message;
+      response = await fetch(
+        "https://api.freellmapi.com/openai/v1/chat/completions",
+        {
+          method: "POST",
 
-      return;
+          headers: {
+            "Content-Type": "application/json",
+
+            "Authorization":
+              "Bearer freellmapi-6f21ae601bd230cfcc0fb8fd8fc08a50d6512edb3ac3af14"
+          },
+
+          body: JSON.stringify({
+            model: "openai/gpt-oss-120b",
+
+            messages: [
+              {
+                role: "user",
+                content: text
+              }
+            ]
+          })
+        }
+      );
+
+      data = await response.json();
+
+      console.log(data);
     }
 
     document.getElementById("out").innerText =

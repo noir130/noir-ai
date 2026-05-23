@@ -97,21 +97,52 @@ button:hover{
 <div class="input-area">
   <input id="msg" placeholder="Type message">
   <button onclick="chat()">Send</button>
+
+  <button onclick="startVoice()">🎤</button>
 </div>
 
 <div id="out" class="chat-box"></div>
 
 </div>
+  
+function startVoice(){
 
+const recognition =
+new webkitSpeechRecognition();
+
+recognition.lang = "en-US";
+
+recognition.onresult = function(event){
+
+document.getElementById("msg").value =
+event.results[0][0].transcript;
+
+chat();
+
+};
+
+recognition.start();
+
+}
+  
 <script>
 
 async function chat() {
+  document.getElementById("msg")
+.addEventListener("keypress", function(e){
+
+if(e.key === "Enter"){
+chat();
+}
+
+});
 
   const text =
     document.getElementById("msg").value;
+  document.getElementById("msg").value = "";
 
-  document.getElementById("out").innerText =
-    "Thinking...";
+  document.getElementById("out").innerHTML =
+    '<div class="typing">Noir AI is typing...</div>'
 
   try {
 
@@ -181,8 +212,19 @@ async function chat() {
     }
 
     document.getElementById("out").innerText =
-      data.choices[0].message.content;
+    '<div class="user">🧑 ' + text + '</div>';
 
+document.getElementById("out").innerHTML +=
+'<div class="bot">🤖 ' +
+data.choices[0].message.content +
+  const speak = new SpeechSynthesisUtterance(
+data.choices[0].message.content
+);
+
+speechSynthesis.speak(speak);
+'</div>';
+document.getElementById("out").scrollTop =
+document.getElementById("out").scrollHeight;
   }
 
   catch(err) {

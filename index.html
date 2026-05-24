@@ -353,7 +353,7 @@ async function chat(){
 
         const response =
         await fetch(
-        "https://api.freellmapi.com/chat/completions",
+        "http://localhost:5173/openai/v1/chat/completions",
         {
             method:"POST",
 
@@ -364,7 +364,7 @@ async function chat(){
 
             body:JSON.stringify({
 
-                model:"openai/gpt-oss-120b",
+                model:"auto",
 
                 messages:[
                     {
@@ -409,7 +409,7 @@ async function chat(){
 
                 body:JSON.stringify({
 
-                    model:"llama3-70b-8192",
+                    model:"llama-3.3-70b-versatile",
 
                     messages:[
                         {

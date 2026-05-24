@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>NOIR</title>
+
+<title>NOIR AI</title>
 
 <style>
 
@@ -11,248 +12,161 @@
     margin:0;
     padding:0;
     box-sizing:border-box;
-    font-family:Arial,sans-serif;
+    font-family:Arial, sans-serif;
 }
 
 body{
+    background:#020617;
     height:100vh;
     display:flex;
     justify-content:center;
     align-items:center;
     overflow:hidden;
-    background:
-    radial-gradient(circle at center,
-    #021b3a 0%,
-    #010814 60%,
-    #000814 100%);
 }
 
-/* MAIN */
+/* BACKGROUND GLOW */
+
+body::before{
+    content:"";
+    position:absolute;
+    width:600px;
+    height:600px;
+    background:radial-gradient(circle,#00e5ff33,transparent 70%);
+    filter:blur(80px);
+}
+
+/* MAIN HUD */
 
 .container{
-    position:relative;
-    width:420px;
+    width:430px;
     height:760px;
-
+    background:rgba(10,20,40,0.55);
+    border:1px solid rgba(255,255,255,0.08);
     border-radius:35px;
-
-    background:
-    rgba(255,255,255,0.04);
-
     backdrop-filter:blur(25px);
-
-    border:
-    1px solid rgba(255,255,255,0.08);
-
     box-shadow:
-    0 0 35px rgba(0,229,255,0.25);
+    0 0 25px #00e5ff44,
+    inset 0 0 25px rgba(255,255,255,0.03);
+
+    position:relative;
+    overflow:hidden;
+    padding:25px;
 }
 
-/* CENTER HUD */
+/* RING */
 
 .hud{
-    position:absolute;
-    top:80px;
-    left:50%;
-    transform:translateX(-50%);
-
-    width:260px;
-    height:260px;
-
+    width:250px;
+    height:250px;
+    margin:auto;
+    margin-top:10px;
+    position:relative;
     display:flex;
     justify-content:center;
     align-items:center;
 }
 
-/* RINGS */
-
-.ring1,
-.ring2,
-.ring3,
-.voice-ring{
-
-    position:absolute;
-    border-radius:50%;
-}
-
 .ring1{
-    width:260px;
-    height:260px;
-
+    position:absolute;
+    width:250px;
+    height:250px;
+    border-radius:50%;
     border:4px solid #00e5ff;
-
     box-shadow:
-    0 0 25px #00e5ff;
-
-    animation:spin 10s linear infinite;
+    0 0 20px #00e5ff,
+    0 0 50px #00e5ff;
+    animation:rotate 10s linear infinite;
 }
 
 .ring2{
-    width:200px;
-    height:200px;
-
+    position:absolute;
+    width:190px;
+    height:190px;
+    border-radius:50%;
     border:4px dashed #00e5ff;
-
-    animation:spinReverse 6s linear infinite;
+    animation:rotate2 12s linear infinite;
 }
 
 .ring3{
-    width:140px;
-    height:140px;
-
-    border:3px solid #7df9ff;
-
-    box-shadow:
-    0 0 20px #00e5ff;
+    position:absolute;
+    width:135px;
+    height:135px;
+    border-radius:50%;
+    border:2px solid #88ffff;
+    box-shadow:0 0 20px #00ffff;
 }
 
-/* AI IMAGE */
+/* SPEAKING ANIMATION */
+
+.speaking .ring1{
+    animation:speak1 .8s infinite alternate;
+}
+
+.speaking .ring2{
+    animation:speak2 .5s infinite alternate;
+}
+
+@keyframes speak1{
+    from{
+        transform:scale(1);
+        opacity:.8;
+    }
+
+    to{
+        transform:scale(1.08);
+        opacity:1;
+    }
+}
+
+@keyframes speak2{
+    from{
+        transform:scale(1);
+    }
+
+    to{
+        transform:scale(.9);
+    }
+}
+
+@keyframes rotate{
+    from{
+        transform:rotate(0deg);
+    }
+
+    to{
+        transform:rotate(360deg);
+    }
+}
+
+@keyframes rotate2{
+    from{
+        transform:rotate(360deg);
+    }
+
+    to{
+        transform:rotate(0deg);
+    }
+}
 
 .bot{
     position:absolute;
-    font-size:75px;
-    z-index:10;
-
-    filter:
-    drop-shadow(0 0 15px #00e5ff);
-}
-
-/* VOICE EFFECT */
-
-.voice-ring{
-    width:100px;
-    height:100px;
-
-    background:
-    rgba(0,229,255,0.15);
-
-    box-shadow:
-    0 0 20px #00e5ff;
-
-    opacity:0;
-}
-
-.speaking .voice-ring{
-    animation:voicePulse 0.6s infinite;
-    opacity:1;
+    font-size:65px;
+    z-index:5;
+    filter:drop-shadow(0 0 15px #00e5ff);
 }
 
 /* CHAT */
 
 .chat-box{
-    position:absolute;
-
-    left:20px;
-    right:20px;
-    bottom:110px;
-
-    height:260px;
-
+    width:100%;
+    height:300px;
+    margin-top:25px;
     overflow-y:auto;
-
+    padding:10px;
     border-radius:25px;
-
-    padding:15px;
-
-    background:
-    rgba(255,255,255,0.04);
-
-    border:
-    1px solid rgba(255,255,255,0.08);
+    background:rgba(255,255,255,0.03);
+    border:1px solid rgba(255,255,255,0.05);
 }
-
-/* BOT MESSAGE */
-
-.bot-msg{
-    margin:10px 0;
-
-    padding:14px;
-
-    border-radius:18px;
-
-    color:white;
-
-    background:
-    rgba(255,255,255,0.08);
-
-    border:
-    1px solid rgba(255,255,255,0.08);
-
-    animation:fadeIn 0.4s;
-}
-
-/* TYPING */
-
-.typing{
-    color:#7df9ff;
-    margin:10px 0;
-    animation:blink 1s infinite;
-}
-
-/* INPUT AREA */
-
-.input-area{
-    position:absolute;
-
-    left:20px;
-    right:20px;
-    bottom:20px;
-
-    display:flex;
-    gap:10px;
-}
-
-/* INPUT */
-
-input{
-    flex:1;
-
-    padding:16px;
-
-    border:none;
-    outline:none;
-
-    border-radius:18px;
-
-    background:
-    rgba(255,255,255,0.08);
-
-    color:white;
-
-    font-size:16px;
-
-    border:
-    1px solid rgba(255,255,255,0.08);
-}
-
-/* BUTTONS */
-
-button{
-    width:65px;
-
-    border:none;
-
-    border-radius:18px;
-
-    background:#00d9ff;
-
-    color:white;
-
-    cursor:pointer;
-
-    font-size:20px;
-
-    transition:0.3s;
-
-    box-shadow:
-    0 0 15px #00d9ff66;
-}
-
-button:hover{
-    transform:scale(1.05);
-}
-
-/* SCROLL */
 
 .chat-box::-webkit-scrollbar{
     width:5px;
@@ -260,68 +174,74 @@ button:hover{
 
 .chat-box::-webkit-scrollbar-thumb{
     background:#00e5ff;
-    border-radius:10px;
+    border-radius:20px;
 }
 
-/* ANIMATION */
-
-@keyframes spin{
-
-    from{
-        transform:rotate(0deg);
-    }
-
-    to{
-        transform:rotate(360deg);
-    }
+.bot-msg{
+    background:rgba(255,255,255,0.08);
+    padding:15px;
+    border-radius:20px;
+    color:white;
+    margin-bottom:12px;
+    line-height:1.5;
+    font-size:18px;
+    border:1px solid rgba(255,255,255,0.05);
 }
 
-@keyframes spinReverse{
+/* INPUT */
 
-    from{
-        transform:rotate(360deg);
-    }
+.input-area{
+    position:absolute;
+    bottom:25px;
+    left:25px;
+    right:25px;
+    display:flex;
+    gap:12px;
+}
 
-    to{
-        transform:rotate(0deg);
-    }
+.input-area input{
+    flex:1;
+    height:60px;
+    border:none;
+    outline:none;
+    border-radius:20px;
+    padding:0 20px;
+    background:rgba(255,255,255,0.08);
+    color:white;
+    font-size:18px;
+    backdrop-filter:blur(10px);
+}
+
+.input-area input::placeholder{
+    color:#aaaaaa;
+}
+
+.input-area button{
+    width:70px;
+    border:none;
+    border-radius:20px;
+    background:#00d9ff;
+    color:white;
+    font-size:24px;
+    cursor:pointer;
+    box-shadow:0 0 15px #00e5ff;
+    transition:.3s;
+}
+
+.input-area button:hover{
+    transform:scale(1.05);
+}
+
+.typing{
+    color:#00e5ff;
+    padding:10px;
+    font-style:italic;
+    animation:blink 1s infinite;
 }
 
 @keyframes blink{
-
     50%{
-        opacity:0.3;
-    }
-}
-
-@keyframes fadeIn{
-
-    from{
-        opacity:0;
-        transform:translateY(10px);
-    }
-
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
-}
-
-@keyframes voicePulse{
-
-    0%{
-        transform:scale(1);
-        opacity:0.8;
-    }
-
-    50%{
-        transform:scale(1.6);
-        opacity:0.2;
-    }
-
-    100%{
-        transform:scale(1);
-        opacity:0.8;
+        opacity:.3;
     }
 }
 
@@ -340,17 +260,13 @@ button:hover{
         <div class="ring2"></div>
         <div class="ring3"></div>
 
-        <div class="voice-ring"></div>
-
-        <div class="bot">
-            🤖
-        </div>
+        <div class="bot">🤖</div>
 
     </div>
 
     <!-- CHAT -->
 
-    <div id="out" class="chat-box">
+    <div class="chat-box" id="out">
 
         <div class="bot-msg">
             🤖 Hello! I am Noir AI.
@@ -363,17 +279,13 @@ button:hover{
     <div class="input-area">
 
         <input
+        type="text"
         id="msg"
-        placeholder="Ask anything..."
-        >
+        placeholder="Ask anything...">
 
-        <button onclick="chat()">
-            ➤
-        </button>
+        <button onclick="chat()">➤</button>
 
-        <button onclick="startVoice()">
-            🎤
-        </button>
+        <button onclick="startVoice()">🎤</button>
 
     </div>
 
@@ -381,7 +293,9 @@ button:hover{
 
 <script>
 
-/* ===== VOICE INPUT ===== */
+/* =========================
+   VOICE INPUT
+========================= */
 
 function startVoice(){
 
@@ -392,86 +306,97 @@ function startVoice(){
 
     recognition.onresult = function(event){
 
-        document.getElementById("msg").value =
+        document
+        .getElementById("msg")
+        .value =
         event.results[0][0].transcript;
 
         chat();
-    }
+
+    };
 
     recognition.start();
 }
 
-/* ===== CHAT ===== */
+/* =========================
+   CHAT
+========================= */
 
 async function chat(){
 
     const text =
     document.getElementById("msg").value;
 
-    if(text.trim() === "") return;
+    if(!text) return;
 
     document.getElementById("msg").value = "";
 
     const out =
     document.getElementById("out");
 
-    /* TYPING */
-
-    out.innerHTML +=
-    `<div class="typing" id="typing">
+    out.innerHTML += `
+    <div class="typing" id="typing">
     🤖 Thinking...
-    </div>`;
+    </div>
+    `;
 
     out.scrollTop =
     out.scrollHeight;
 
+    let reply = "";
+
+    /* =========================
+       TRY FREELLM FIRST
+    ========================= */
+
     try{
 
-        let response;
+        const response =
+        await fetch(
+        "https://api.freellmapi.com/chat/completions",
+        {
+            method:"POST",
 
-        /* ===== TRY FREELLMAPI ===== */
+            headers:{
+                "Content-Type":"application/json"
+           "Authorization":"Bearer freellmapi-6f21ae601bd230cfcc0fb8fd8fc08a50d6512edb3ac3af14"
+            },
+
+            body:JSON.stringify({
+
+                model:"openai/gpt-oss-120b",
+
+                messages:[
+                    {
+                        role:"user",
+                        content:text
+                    }
+                ]
+
+            })
+
+        });
+
+        const data =
+        await response.json();
+
+        reply =
+        data.choices[0]
+        .message.content;
+
+    }
+
+    catch{
+
+        /* =========================
+           GROQ FALLBACK
+        ========================= */
 
         try{
 
-            response = await fetch(
-            "https://api.freellmapi.com/openai/v1/chat/completions",
-
-            {
-                method:"POST",
-
-                headers:{
-                    "Content-Type":"application/json",
-
-                    "Authorization":
-                    "Bearer freellmapi-6f21ae601bd230cfcc0fb8fd8fc08a50d6512edb3ac3af14"
-                },
-
-                body:JSON.stringify({
-
-                    model:"gpt-oss-120b",
-
-                    messages:[
-                        {
-                            role:"user",
-                            content:text
-                        }
-                    ]
-                })
-            });
-
-            if(!response.ok){
-                throw new Error("FreeLLMAPI failed");
-            }
-
-        }
-
-        /* ===== FALLBACK TO GROQ ===== */
-
-        catch{
-
-            response = await fetch(
+            const response =
+            await fetch(
             "https://api.groq.com/openai/v1/chat/completions",
-
             {
                 method:"POST",
 
@@ -492,81 +417,77 @@ async function chat(){
                             content:text
                         }
                     ]
+
                 })
+
             });
 
+            const data =
+            await response.json();
+
+            reply =
+            data.choices[0]
+            .message.content;
+
         }
 
-        let data =
-        await response.json();
+        catch{
 
-        document
-        .getElementById("typing")
-        .remove();
+            reply =
+            "⚠ Unable to connect to AI.";
 
-        const reply =
-        data.choices[0].message.content;
-
-        /* SHOW BOT MESSAGE ONLY */
-
-        out.innerHTML +=
-        `<div class="bot-msg">
-        🤖 ${reply}
-        </div>`;
-
-        /* VOICE */
-
-        const speak =
-        new SpeechSynthesisUtterance(reply);
-
-        speak.rate = 1;
-        speak.pitch = 1;
-
-        /* START VOICE EFFECT */
-
-        document
-        .getElementById("hud")
-        .classList.add("speaking");
-
-        speak.onend = function(){
-
-            document
-            .getElementById("hud")
-            .classList.remove("speaking");
         }
-
-        speechSynthesis.speak(speak);
-
-        out.scrollTop =
-        out.scrollHeight;
 
     }
 
-    catch(err){
+    /* REMOVE THINKING */
 
     const typing =
-document.getElementById("typing");
+    document.getElementById("typing");
 
-if(typing){
-    typing.remove();
-}
-
-        out.innerHTML +=
-        `<div class="bot-msg">
-        ❌ AI Error
-        </div>`;
-
-        console.log(err);
+    if(typing){
+        typing.remove();
     }
+
+    /* SHOW MESSAGE */
+
+    out.innerHTML += `
+    <div class="bot-msg">
+    🤖 ${reply}
+    </div>
+    `;
+
+    out.scrollTop =
+    out.scrollHeight;
+
+    /* SPEAK */
+
+    const hud =
+    document.getElementById("hud");
+
+    hud.classList.add("speaking");
+
+    const speak =
+    new SpeechSynthesisUtterance(reply);
+
+    speechSynthesis.speak(speak);
+
+    speak.onend = function(){
+
+        hud.classList.remove("speaking");
+
+    };
+
 }
 
-/* ===== ENTER ===== */
+/* =========================
+   ENTER KEY
+========================= */
 
 document
 .getElementById("msg")
 .addEventListener(
 "keypress",
-
 function(e){
 
     if(e.key === "Enter"){

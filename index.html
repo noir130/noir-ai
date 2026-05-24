@@ -544,9 +544,12 @@ async function chat(){
 
     catch(err){
 
-        document
-        .getElementById("typing")
-        .remove();
+    const typing =
+document.getElementById("typing");
+
+if(typing){
+    typing.remove();
+}
 
         out.innerHTML +=
         `<div class="bot-msg">
